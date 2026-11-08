@@ -1,0 +1,4 @@
+ChatGPT GitHub write-access test
+Repository: mike97722/thesoucys.net
+Purpose: Verify branch-only file creation without changing the live GitHub Pages website.
+Date: 2026-11-07
