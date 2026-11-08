@@ -1,0 +1,29 @@
+name: Update recipe library
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'recipes/**/index.html'
+      - 'scripts/build_recipe_index.py'
+      - '.github/workflows/update-recipes.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Generate recipe library
+        run: python3 scripts/build_recipe_index.py
+      - name: Commit updated index if needed
+        run: |
+          if ! git diff --quiet -- recipes/index.html; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add recipes/index.html
+            git commit -m "Automatically update recipe library"
+            git push
+          fi
