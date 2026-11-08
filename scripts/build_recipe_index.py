@@ -35,7 +35,7 @@ def main():
         keywords=r.get('keywords',[])
         if isinstance(keywords,list): keywords=' '.join(map(str,keywords))
         # Approved recipe tags come from the same JSON-LD keywords used on the recipe page.
-        approved = {'Dairy-free', 'Almond-free', 'Main Dish', 'Side Dish', 'Air fryer', 'Grilling', 'Smoker'}
+        approved = {'Dairy-free', 'Main Dish', 'Side Dish', 'Air fryer', 'Grilling', 'Smoker'}
         raw_tags = r.get('keywords', [])
         tag_list = [t.strip() for t in raw_tags.split(',')] if isinstance(raw_tags, str) else [str(t).strip() for t in raw_tags]
         visible_tags = [t for t in tag_list if t in approved]
