@@ -38,7 +38,8 @@
       if (!Number.isFinite(n) || n < .5 || n > 999) return;
       current = n;
       input.value = String(n);
-      display.textContent = n + (n === 1 ? " serving" : " servings");
+      const unit = widget.dataset.unit || "serving";
+      display.textContent = n + " " + (unit === "batch" ? (n === 1 ? "batch" : "batches") : (n === 1 ? "serving" : "servings"));
       ingredients.forEach(function (el) { el.textContent = scale(el.dataset.original, n / base); });
       buttons.forEach(function (b) {
         const active = Math.abs(n - base * Number(b.dataset.scale)) < .00001;
