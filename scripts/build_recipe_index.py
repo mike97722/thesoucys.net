@@ -50,7 +50,12 @@ def main():
         ingredients=' '.join(map(str,r.get('recipeIngredient',[])))
         search=' '.join((title,desc,category,str(keywords),ingredients)).lower()
         slug=path.parent.name
-        cards.append(f'<a class="card" data-search="{escape(search,quote=True)}" href="/recipes/{escape(slug,quote=True)}/"><div class="card-art recipe" aria-hidden="true">✦</div><div class="card-body">{tag_section}<h3>{escape(title)}</h3><p>{escape(desc)}</p><span class="arrow">View recipe →</span></div></a>')
+        image=r.get('image')
+        if isinstance(image,list): image=image[0] if image else None
+        if isinstance(image,dict): image=image.get('url') or image.get('contentUrl')
+        image=str(image) if image else ''
+        art=(f'<img class="recipe-card-image" src="{escape(image,quote=True)}" alt="{escape(title,quote=True)}" loading="lazy" decoding="async">' if image.startswith('/assets/recipes/') else '<div class="card-art recipe" aria-hidden="true">✦</div>')
+        cards.append(f'<a class="card" data-search="{escape(search,quote=True)}" href="/recipes/{escape(slug,quote=True)}/">{art}<div class="card-body">{tag_section}<h3>{escape(title)}</h3><p>{escape(desc)}</p><span class="arrow">View recipe →</span></div></a>')
     page=INDEX.read_text(encoding='utf-8')
     if START not in page or END not in page: sys.exit('Missing recipe card markers in recipes/index.html')
     page=re.sub(re.escape(START)+r'.*?'+re.escape(END),START+'\n'+'\n'.join(cards)+'\n'+END,page,flags=re.S)
